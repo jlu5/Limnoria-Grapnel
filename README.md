@@ -1,6 +1,35 @@
 # Grapnel hooks for Limnoria
 
+<a href="https://drone.overdrivenetworks.com/jlu5/Limnoria-Grapnel" style="float: right">
+  <img src="https://drone.overdrivenetworks.com/api/badges/jlu5/Limnoria-Grapnel/status.svg" />
+</a>
+
 **Grapnel** allows announcing Slack-style webhooks to IRC channels, via Limnoria's HTTP server. Currently, only plain text payloads are supported.
+
+## Install
+
+### Via pip
+
+You can install Limnoria plugins using `pip`:
+
+```
+$ pip3 install "git+https://github.com/jlu5/Limnoria-Grapnel.git#egg=Grapnel"
+```
+
+### Via Git checkout
+
+Or, clone the Git repository somewhere and add the *parent* directory to your bot's `config directories.plugins` setting.
+Make sure the directory that you save the plugin to matches the plugin name:
+
+```
+$ git clone https://github.com/jlu5/Limnoria-Grapnel Grapnel
+```
+
+After cloning, you can update your copy of the plugin in place by entering the Grapnel directory and running:
+
+```
+$ git pull
+```
 
 ## Usage
 
