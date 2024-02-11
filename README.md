@@ -8,17 +8,11 @@
 
 ## Install
 
-### Via pip
-
-You can install Limnoria plugins using `pip`:
-
-```
-$ pip3 install "git+https://github.com/jlu5/Limnoria-Grapnel.git#egg=Grapnel"
-```
+Due to technical limitations, installation via Limnoria's PluginDownloader or pip is currently unavailable.
 
 ### Via Git checkout
 
-Or, clone the Git repository somewhere and add the *parent* directory to your bot's `config directories.plugins` setting.
+Clone the Git repository somewhere and add the *parent* directory to your bot's `config directories.plugins` setting.
 Make sure the directory that you save the plugin to matches the plugin name:
 
 ```

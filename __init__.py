@@ -37,7 +37,7 @@ import supybot
 from supybot import world
 
 # Use this for the version of this plugin.
-__version__ = ""
+__version__ = "0.1.0"
 
 __author__ = getattr(supybot.authors, 'jlu',
                      supybot.Author('James Lu', 'jlu5', 'james@overdrivenetworks.com'))

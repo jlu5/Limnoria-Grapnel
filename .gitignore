@@ -7,6 +7,8 @@ __pycache__/
 backup/
 web/
 tmp/
+build/
+*.egg-info
 
 # emacs/vi
 *.swo
