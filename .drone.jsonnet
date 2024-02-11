@@ -23,4 +23,5 @@ local supybot_test(py_version) = {
     supybot_test("3.9"),
     supybot_test("3.10"),
     supybot_test("3.11"),
+    supybot_test("3.12"),
 ]
