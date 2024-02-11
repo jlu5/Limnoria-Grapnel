@@ -6,7 +6,7 @@ local supybot_test(py_version) = {
     steps: [
         {
             name: "test",
-            image: "python:" + py_version + "-bullseye",
+            image: "python:" + py_version + "-bookworm",
             commands: [
                 "pip install limnoria",
                 "export PLUGIN_NAME=$(echo $DRONE_REPO_NAME | sed 's/^Limnoria-//i')",
