@@ -44,15 +44,18 @@ class GrapnelTestCase(ChannelHTTPPluginTestCase):
         'plugins.grapnel.baseurl': TEST_BASEURL
     }
     timeout = 10
+    DEFAULT_HEADERS = {'Content-Type': 'application/json'}
 
     # Like HTTPPluginTestCase.request, but with JSON Content-Type header and data
-    def jsonPost(self, url, json_data):
+    def jsonPost(self, url, json_data, headers=None):
         assert url.startswith('/')
         wfile = io.BytesIO()
         rfile = io.BytesIO()
         # wfile and rfile are reversed in Limnoria's HTTPPluginTestCase.request too?
+        # pylint: disable=arguments-out-of-order
         connection = FakeHTTPConnection(wfile, rfile)
-        headers = {'Content-Type': 'application/json'}
+        if headers is None:
+            headers = self.DEFAULT_HEADERS
         connection.request('POST', url, json_data, headers)
         rfile.seek(0)
         handler = TestRequestHandler(rfile, wfile)
@@ -76,6 +79,19 @@ class GrapnelTestCase(ChannelHTTPPluginTestCase):
     def testPOSTSuccess(self):
         url_fragment = self._addHook()
         (respCode, body) = self.jsonPost(url_fragment, json.dumps({"text": "123456"}))
+        self.assertEqual(respCode, 200, body.decode())
+        self.assertSnarfRegexp(' ', r'\[.*?\] 123456')
+
+    def testPOSTMissingHeaders(self):
+        url_fragment = self._addHook()
+        (respCode, body) = self.jsonPost(url_fragment, json.dumps({"text": "123456"}), headers={})
+        self.assertEqual(respCode, 400, body.decode())
+        self.assertSnarfNoResponse(' ')
+
+    def testPOSTCaseInsensitiveContentType(self):
+        url_fragment = self._addHook()
+        headers = {'content-type': 'application/json'}
+        (respCode, body) = self.jsonPost(url_fragment, json.dumps({"text": "123456"}), headers=headers)
         self.assertEqual(respCode, 200, body.decode())
         self.assertSnarfRegexp(' ', r'\[.*?\] 123456')
 
