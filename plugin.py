@@ -40,7 +40,7 @@ from supybot.i18n import PluginInternationalization
 
 _ = PluginInternationalization('Grapnel')
 
-class GrappleHTTPCallback(httpserver.SupyHTTPServerCallback):
+class GrapnelHTTPCallback(httpserver.SupyHTTPServerCallback):
     name = 'Grapnel'
 
     def _send_response(self, handler, code, text, extra_headers=None):
@@ -140,7 +140,7 @@ class Grapnel(callbacks.Plugin):
     def __init__(self, irc):
         super().__init__(irc)
 
-        self.callback = GrappleHTTPCallback()
+        self.callback = GrapnelHTTPCallback()
         self.callback.plugin = self
         httpserver.hook(HTTP_ENDPOINT_NAME, self.callback)
 
