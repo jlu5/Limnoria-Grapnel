@@ -95,6 +95,14 @@ class GrapnelTestCase(ChannelHTTPPluginTestCase):
         self.assertEqual(respCode, 200, body.decode())
         self.assertSnarfRegexp(' ', r'\[.*?\] 123456')
 
+    def testPOSTContentTypeCharset(self):
+        # Test Content-Type with encoding trailer. This is not standard but many implementations do it anyways
+        url_fragment = self._addHook()
+        headers = {'Content-type': 'application/json; encoding=utf-8'}
+        (respCode, body) = self.jsonPost(url_fragment, json.dumps({"text": "abcdef"}), headers=headers)
+        self.assertEqual(respCode, 200, body.decode())
+        self.assertSnarfRegexp(' ', r'\[.*?\] abcdef')
+
     def testPOSTCustomFormat(self):
         url_fragment = self._addHook()
         sp = urllib.parse.urlsplit(url_fragment)

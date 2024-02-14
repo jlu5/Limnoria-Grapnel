@@ -45,7 +45,7 @@ class GrapnelHTTPCallback(httpserver.SupyHTTPServerCallback):
 
     def _send_response(self, handler, code, text, extra_headers=None):
         handler.send_response(code)
-        handler.send_header('Content-type', 'text/plain')
+        handler.send_header('Content-Type', 'text/plain')
         if extra_headers:
             for header_pair in extra_headers:
                 handler.send_header(*header_pair)
@@ -56,8 +56,8 @@ class GrapnelHTTPCallback(httpserver.SupyHTTPServerCallback):
     def doPost(self, handler, path, form=None):
         try:
             log.info(path)
-            if handler.headers['Content-type'] != 'application/json':
-                self._send_response(handler, 400, "Bad HTTP Content-Type (expected JSON)")
+            if not handler.headers['Content-Type'].startswith('application/json'):
+                self._send_response(handler, 400, "Bad HTTP Content-Type (expected application/json)")
                 return
             try:
                 data = json.loads(form.decode('utf-8'))
