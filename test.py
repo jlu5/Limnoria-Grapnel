@@ -117,6 +117,13 @@ class GrapnelTestCase(ChannelHTTPPluginTestCase):
             self.assertEqual(respCode, 200, body.decode())
             self.assertSnarfResponse(' ', 'Limnoria says: [foobar] 123456')
 
+    def testPOSTMultiline(self):
+        url_fragment = self._addHook()
+        (respCode, body) = self.jsonPost(url_fragment, json.dumps({"text": "hello\nworld\n"}))
+        self.assertEqual(respCode, 200, body.decode())
+        self.assertSnarfRegexp(' ', r'\[.*?\] hello')
+        self.assertSnarfRegexp(' ', r'\[.*?\] world')
+
     def testPOSTInvalidJSON(self):
         url_fragment = self._addHook()
         (respCode, body) = self.jsonPost(url_fragment, "<html></html>")
@@ -191,7 +198,7 @@ class GrapnelTestCase(ChannelHTTPPluginTestCase):
         self.assertResponse('grapnel listhooks #Limnoria', 'Webhooks for #limnoria@test: #3')
         self.assertRegexp('grapnel listhooks #', r'\#\@test.*\(none\)')
 
-    def testResetTokenWorks(self):
+    def testResetToken(self):
         url_fragment_old = self._addHook()
         m = self.assertRegexp("grapnel resettoken 1", fr"{TEST_BASEURL}/grapnel")
         url_fragment_new = self._getLinkFragment(m)

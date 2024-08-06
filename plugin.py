@@ -104,19 +104,23 @@ class GrapnelHTTPCallback(httpserver.SupyHTTPServerCallback):
                 self._send_response(handler, 500, f"Network {network!r} is not connected")
                 return
 
-            fields = {
-                "text": str(text),
-                "name": sender_name
-            }
-            # pylint: disable=no-member
-            tmpl = self.plugin.registryValue("format", channel=channel, network=network)
-            out_s = ircutils.standardSubstitute(irc, None, tmpl, env=fields)
-            if not out_s:
-                log.warning("Grapnel: output text for webhook %s / %s@%s is empty", hookID, channel, network)
-                self._send_response(handler, 500, "Output text is empty (misconfigured output template?)")
-                return
-            m = ircmsgs.privmsg(channel, out_s)
-            irc.queueMsg(m)
+            for line in str(text).splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                fields = {
+                    "text": line,
+                    "name": sender_name
+                }
+                # pylint: disable=no-member
+                tmpl = self.plugin.registryValue("format", channel=channel, network=network)
+                out_s = ircutils.standardSubstitute(irc, None, tmpl, env=fields)
+                if not out_s:
+                    log.warning("Grapnel: output text for webhook %s / %s@%s is empty", hookID, channel, network)
+                    self._send_response(handler, 500, "Output text is empty (misconfigured output template?)")
+                    return
+                m = ircmsgs.privmsg(channel, out_s)
+                irc.queueMsg(m)
 
             self._send_response(handler, 200, "OK")
 
