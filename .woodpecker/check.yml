@@ -1,0 +1,21 @@
+steps:
+  - commands:
+      - pip install limnoria
+      - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - export PLUGIN_NAME=$(echo $CI_REPO_NAME | sed 's/^Limnoria-//i')
+      - echo "Set PLUGIN_NAME to $PLUGIN_NAME from $CI_REPO_NAME ($CI_REPO_URL)"
+
+      - ln -s $(pwd) $PLUGIN_NAME
+      - supybot-test -c $PLUGIN_NAME
+
+    image: python:${PYTHON_VERSION}
+    name: Run tests
+
+when:
+  event: [tag, push, pull_request]
+
+matrix:
+  PYTHON_VERSION:
+    - 3.9
+    - 3.14
